@@ -15,27 +15,22 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Build the Docker image with the specified name and tag
-                    def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                    echo "Last Commit SHA: ${lastCommitSHA}"
-                    def dockerImage = docker.build("${IMAGE_NAME}:${lastCommitSHA}")
-                }
+                def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                echo "Last Commit SHA: ${lastCommitSHA}"
+                sh "docker build -t $IMAGE_NAME:$lastCommitSHA ."
             }
         }
 
-        stage('Publish to Docker Hub') {
+        stage('Login') {
             steps {
-                script {
-                    def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                    echo "Last Commit SHA: ${lastCommitSHA}"
-                    // Log in to Docker Hub with credentials
-                    docker.withRegistry("https://${DOCKER_REGISTRY}", DOCKERHUB_CREDENTIALS_USR, DOCKERHUB_CREDENTIALS_PSW) {
-                        // Push the Docker image with the specified name and tag
-                        def dockerImage = docker.image("${IMAGE_NAME}:${lastCommitSHA}")
-                        dockerImage.push()
-                    }
-                }
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+
+        stage('Push') {
+            steps {
+                def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                sh 'docker push $IMAGE_NAME:$lastCommitSHA'
             }
         }
     }
