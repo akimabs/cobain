@@ -45,6 +45,7 @@ pipeline {
 
     post {
         success {
+            echo "Success"
             // Archive your build artifacts, send notifications, or perform other post-build actions here
         }
     }
