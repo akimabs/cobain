@@ -2,10 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Define environment variables here
-        DOCKER_REGISTRY = 'docker.io'  // Docker Hub registry
-        DOCKERHUB_USERNAME = credentials('akimabs')
-        DOCKERHUB_PASSWORD = credentials('Akskt2004')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         IMAGE_NAME = 'akimabs/cobain'
     }
 
@@ -33,7 +30,7 @@ pipeline {
                     def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                     echo "Last Commit SHA: ${lastCommitSHA}"
                     // Log in to Docker Hub with credentials
-                    docker.withRegistry("https://${DOCKER_REGISTRY}", DOCKERHUB_USERNAME, DOCKERHUB_PASSWORD) {
+                    docker.withRegistry("https://${DOCKER_REGISTRY}", DOCKERHUB_CREDENTIALS_USR, DOCKERHUB_CREDENTIALS_PSW) {
                         // Push the Docker image with the specified name and tag
                         def dockerImage = docker.image("${IMAGE_NAME}:${lastCommitSHA}")
                         dockerImage.push()
