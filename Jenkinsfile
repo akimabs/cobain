@@ -11,7 +11,7 @@ pipeline {
             steps {
                 script {
                     img ='httpd:2.4-alpine'
-                    docker. image ("${img}").run('-d -p 80:80')
+                    docker.image ("${img}").run('-d -p 80:80')
                 }
             }
         }
