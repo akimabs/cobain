@@ -7,6 +7,15 @@ pipeline {
     }
 
     stages {
+        stage('Run Docker') {
+            steps {
+                script {
+                    img ='httpd:2.4-alpine'
+                    docker. image ("S(img)").run('-d -p 80:80')
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
