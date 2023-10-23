@@ -9,5 +9,4 @@ public class CobainApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CobainApplication.class, args);
 	}
-
 }
