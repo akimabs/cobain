@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    when {
+        branch 'main'
+    }
+
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         IMAGE_NAME = 'akimabs/cobain'
