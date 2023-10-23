@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    when {
-        branch 'main'
-    }
-
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         IMAGE_NAME = 'akimabs/cobain'
@@ -19,9 +15,11 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                echo "Last Commit SHA: ${lastCommitSHA}"
-                sh "docker build -t $IMAGE_NAME:$lastCommitSHA ."
+                script {
+                    def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    echo "Last Commit SHA: ${lastCommitSHA}"
+                    sh "docker build -t $IMAGE_NAME:$lastCommitSHA ."
+                }
             }
         }
 
@@ -33,8 +31,10 @@ pipeline {
 
         stage('Push') {
             steps {
-                def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                sh 'docker push $IMAGE_NAME:$lastCommitSHA'
+                script {
+                    def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    sh 'docker push $IMAGE_NAME:$lastCommitSHA'
+                }
             }
         }
     }
