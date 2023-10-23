@@ -1,4 +1,6 @@
-FROM openjdk:17.0.1-jdk-slim
+FROM alpine:latest
+
+RUN apk update && apk add openjdk11-jre
 
 WORKDIR /app
 
