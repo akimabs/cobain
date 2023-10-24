@@ -1,14 +1,13 @@
 package com.ciam.cobain.service.impl;
 
-import com.ciam.cobain.dto.mapper.UserMapper;
-import com.ciam.cobain.dto.request.UserRequest;
-import com.ciam.cobain.dto.response.UserResponse;
+import com.ciam.cobain.dto.response.BaseResponse;
 import com.ciam.cobain.entity.UserEntity;
 import com.ciam.cobain.repository.UserRepository;
 import com.ciam.cobain.service.UserService;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,49 +21,50 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserEntity> findAllUser() {
-        return userRepository.findAll();
+    public BaseResponse<List<UserEntity>> findAllUser() {
+        List<UserEntity> data = userRepository.findAll();
+        return new BaseResponse<List<UserEntity>>(200, data);
     }
 
     @Override
-    public Optional<UserEntity> findById(Integer id) {
-        return userRepository.findById(id);
+    public BaseResponse<Optional<UserEntity>> findById(Integer id) {
+        Optional<UserEntity> data = userRepository.findById(id);
+        return new BaseResponse<Optional<UserEntity>>(200, data);
     }
 
     @Override
-    public UserEntity saveUser(UserEntity userEntity) {
-        return userRepository.save(userEntity);
+    public BaseResponse<UserEntity> saveUser(UserEntity userEntity) {
+        UserEntity data = userRepository.save(userEntity);
+        return new BaseResponse<UserEntity>(200, data);
     }
 
     @Override
-    public UserEntity updateUser(UserEntity userEntity) {
-        return userRepository.save(userEntity);
+    public BaseResponse<UserEntity[]> saveUserWithHPA(UserEntity[] userEntities) {
+        List<UserEntity> savedEntities = new ArrayList<>();
+
+        for (UserEntity user : userEntities) {
+            UserEntity savedUser = userRepository.save(user);
+            savedEntities.add(savedUser);
+        }
+        return new BaseResponse<UserEntity[]>(200, savedEntities.toArray(new UserEntity[0]));
     }
 
     @Override
-    public void deleteUser(Integer id) {
-        userRepository.deleteById(id);
-    }
-
-    // Using Request and Response with save and update employee
-
-    @Override
-    public UserResponse saveUser(UserRequest userRequest) {
-        UserEntity userEntity = UserMapper.MAPPER.fromRequestToEntity(userRequest);
-        userRepository.save(userEntity);
-        return UserMapper.MAPPER.fromEntityToResponse(userEntity);
+    public BaseResponse<UserEntity> updateUser(UserEntity userEntity) {
+        UserEntity data = userRepository.save(userEntity);
+        return new BaseResponse<UserEntity>(200, data);
     }
 
     @Override
-    public UserResponse updateUser(UserRequest userRequest, Integer id) {
+    public BaseResponse<UserEntity> deleteUser(Integer id) {
+        Optional<UserEntity> userOptional = userRepository.findById(id);
 
-        Optional<UserEntity> checkExistingEmployee = findById(id);
-        if (!checkExistingEmployee.isPresent())
-            throw new RuntimeException("Employee Id " + id + " Not Found!");
-
-        UserEntity userEntity = UserMapper.MAPPER.fromRequestToEntity(userRequest);
-        userEntity.setId(id);
-        userRepository.save(userEntity);
-        return UserMapper.MAPPER.fromEntityToResponse(userEntity);
+        if (userOptional.isPresent()) {
+            UserEntity data = userOptional.get();
+            userRepository.delete(data);
+            return new BaseResponse<UserEntity>(200, data);
+        } else {
+            return new BaseResponse<UserEntity>(404, null);
+        }
     }
 }

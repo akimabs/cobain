@@ -2,8 +2,7 @@ package com.ciam.cobain.controller;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.ciam.cobain.dto.request.UserRequest;
-import com.ciam.cobain.dto.response.UserResponse;
+import com.ciam.cobain.dto.response.BaseResponse;
 import com.ciam.cobain.entity.UserEntity;
 import com.ciam.cobain.service.UserService;
 
@@ -21,40 +20,33 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserEntity> findAllEmployee() {
+    public BaseResponse<List<UserEntity>> findAllUser() {
         return userService.findAllUser();
     }
 
     @GetMapping("/{id}")
-    public Optional<UserEntity> findEmployeeById(@PathVariable("id") Integer id) {
+    public BaseResponse<Optional<UserEntity>> findUserById(@PathVariable("id") Integer id) {
         return userService.findById(id);
     }
 
     @PostMapping
-    public UserEntity saveEmployee(@RequestBody UserEntity employeeEntity) {
+    public BaseResponse<UserEntity> saveUser(@RequestBody UserEntity employeeEntity) {
         return userService.saveUser(employeeEntity);
     }
 
+    @PostMapping("/bulkcreate")
+    public BaseResponse<UserEntity[]> saveUserWithHPA(@RequestBody UserEntity[] employeeEntity) {
+        return userService.saveUserWithHPA(employeeEntity);
+    }
+
     @PutMapping
-    public UserEntity updateEmployee(@RequestBody UserEntity employeeEntity) {
+    public BaseResponse<UserEntity> updateUser(@RequestBody UserEntity employeeEntity) {
         return userService.updateUser(employeeEntity);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEmployee(@PathVariable("id") Integer id) {
+    public void deleteUser(@PathVariable("id") Integer id) {
         userService.deleteUser(id);
-    }
-
-    // Using Request and Response with save and update employee
-
-    @PostMapping("/res")
-    public UserResponse saveEmpResponse(@RequestBody UserRequest employeeRequest) {
-        return userService.saveUser(employeeRequest);
-    }
-
-    @PutMapping("/res/{id}")
-    public UserResponse updateEmpResponse(@RequestBody UserRequest employeeRequest, @PathVariable("id") Integer id) {
-        return userService.updateUser(employeeRequest, id);
     }
 
 }

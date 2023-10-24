@@ -1,25 +1,22 @@
 package com.ciam.cobain.service;
 
-import com.ciam.cobain.dto.request.UserRequest;
-import com.ciam.cobain.dto.response.UserResponse;
+import com.ciam.cobain.dto.response.BaseResponse;
 import com.ciam.cobain.entity.UserEntity;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    List<UserEntity> findAllUser();
 
-    Optional<UserEntity> findById(Integer id);
+    BaseResponse<List<UserEntity>> findAllUser();
 
-    UserEntity saveUser(UserEntity userEntity);
+    BaseResponse<Optional<UserEntity>> findById(Integer id);
 
-    UserEntity updateUser(UserEntity userEntity);
+    BaseResponse<UserEntity> saveUser(UserEntity userEntity);
 
-    void deleteUser(Integer id);
+    BaseResponse<UserEntity[]> saveUserWithHPA(UserEntity[] userEntity);
 
-    // Using Request for Save and Update Employee
-    UserResponse saveUser(UserRequest userRequest);
+    BaseResponse<UserEntity> updateUser(UserEntity userEntity);
 
-    UserResponse updateUser(UserRequest userRequest, Integer id);
+    BaseResponse<UserEntity> deleteUser(Integer id);
 }
