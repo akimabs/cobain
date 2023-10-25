@@ -46,26 +46,26 @@ pipeline {
     //         }
     //     }
 
-       stage('Stop Image at local') {
-            steps {
-                script {
-                    def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                    def parentCommitSHA = sh(script: "git rev-parse ${lastCommitSHA}^", returnStdout: true).trim()
-                    def imageName = "${IMAGE_NAME}:${parentCommitSHA}"
+    //    stage('Stop Image at local') {
+    //         steps {
+    //             script {
+    //                 def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+    //                 def parentCommitSHA = sh(script: "git rev-parse ${lastCommitSHA}^", returnStdout: true).trim()
+    //                 def imageName = "${IMAGE_NAME}:${parentCommitSHA}"
                     
-                    // Check if the container exists before stopping it
-                    def existingContainerId = sh("docker ps -aqf ancestor=${imageName}", returnStatus: true, returnStdout: true).trim()
+    //                 // Check if the container exists before stopping it
+    //                 def existingContainerId = sh("docker ps -aqf ancestor=${imageName}", returnStatus: true, returnStdout: true).trim()
                     
-                    if (existingContainerId) {
-                        sh "docker stop $imageName"
-                        sh "docker rm $existingContainerId"
-                        echo "Stopped and removed container $imageName"
-                    } else {
-                        echo "Container $imageName not found, skipping removal"
-                    }
-                }
-            }
-        }
+    //                 if (existingContainerId) {
+    //                     sh "docker stop $imageName"
+    //                     sh "docker rm $existingContainerId"
+    //                     echo "Stopped and removed container $imageName"
+    //                 } else {
+    //                     echo "Container $imageName not found, skipping removal"
+    //                 }
+    //             }
+    //         }
+    //     }
 
 
        stage('Running Image at local') {
