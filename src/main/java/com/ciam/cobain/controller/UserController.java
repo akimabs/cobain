@@ -5,9 +5,12 @@ import org.springframework.web.bind.annotation.*;
 import com.ciam.cobain.dto.response.BaseResponse;
 import com.ciam.cobain.entity.UserEntity;
 import com.ciam.cobain.service.UserService;
+import com.fasterxml.jackson.databind.JsonSerializable.Base;
 
 import java.util.List;
 import java.util.Optional;
+
+import javax.swing.text.html.parser.Entity;
 
 @RestController
 @RequestMapping("/users")
@@ -45,8 +48,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id") Integer id) {
-        userService.deleteUser(id);
+    public BaseResponse<UserEntity> deleteUser(@PathVariable("id") Integer id) {
+        return userService.deleteUser(id);
     }
 
 }
