@@ -29,14 +29,15 @@ pipeline {
             }
         }
 
-        stage('Push') {
+       stage('Push') {
             steps {
                 script {
                     def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                    sh 'docker push $IMAGE_NAME:$lastCommitSHA'
+                    sh "docker push $IMAGE_NAME:$lastCommitSHA"
                 }
             }
         }
+
     }
 
     post {
