@@ -49,6 +49,8 @@ pipeline {
        stage('Running Image at local') {
             steps {
                 script {
+                    def parentCommitSHA = sh(script: "git rev-parse ${lastCommitSHA}^", returnStdout: true).trim()
+                    sh "docker stop $IMAGE_NAME:$parentCommitSHA"
                     def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                     sh "docker run -d -p 8000:8000 $IMAGE_NAME:$lastCommitSHA"
                 }
