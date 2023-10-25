@@ -11,6 +11,6 @@ import com.ciam.cobain.dto.response.BaseResponse;
 public class AppController {
     @GetMapping
     public BaseResponse<String> findAllUser() {
-        return new BaseResponse<String>(200, "Hello World");
+        return new BaseResponse<String>(200, "Hello");
     }
 }
