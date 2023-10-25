@@ -4,7 +4,6 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
         IMAGE_NAME = 'akimabs/cobain'
-        SERVICE_FILE = 'k8s/service.yml'
         HPA_FILE = 'k8s/hpa.yml'
     }
 
@@ -48,7 +47,6 @@ pipeline {
 
                     sh "kubectl set image deployment/apps-cobain apps-cobain=$IMAGE_NAME:$lastCommitSHA -n ciam"
                     sh 'kubectl apply -f $HPA_FILE -n ciam'
-                    sh 'kubectl apply -f $SERVICE_FILE -n ciam'
                 }
             }
         }

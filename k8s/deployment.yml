@@ -23,7 +23,7 @@ spec:
               cpu: "0.1"
               memory: "256Mi"
           ports:
-            - containerPort: 8080
+            - containerPort: 8000
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -40,3 +40,15 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_DB
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apps-cobain-service
+spec:
+  selector:
+    app: apps-cobain
+  ports:
+    - protocol: "TCP"
+      port: 8000
+  type: NodePort
