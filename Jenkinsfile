@@ -47,8 +47,8 @@ pipeline {
                     def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                     def parentCommitSHA = sh(script: "git rev-parse ${lastCommitSHA}^", returnStdout: true).trim()
                     def imageName = "${IMAGE_NAME}:${parentCommitSHA}"
-
-                    sh "kubectl set image deployment/apps-cobain apps-cobain=$imageName -n ciam"
+                    def shSetImage = sh(script: sh "kubectl set image deployment/apps-cobain apps-cobain=$imageName -n ciam", returnStdout: true).trim()
+                    
                     sh 'kubectl apply -f $DEPLOYMENT_FILE -n ciam'
                     sh 'kubectl apply -f $HPA_FILE -n ciam'
                 }
