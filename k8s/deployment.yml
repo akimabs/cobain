@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apps-cobain
+spec:
+  selector:
+    matchLabels:
+      app: apps-cobain
+  template:
+    metadata:
+      labels:
+        app: apps-cobain
+    spec:
+      containers:
+        - name: apps-cobain
+          image: images/apps-cobain:v9
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "1"
+              memory: "2560Mi"
+            requests:
+              cpu: "0.1"
+              memory: "256Mi"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apps-cobain-service
+spec:
+  selector:
+    app: apps-cobain
+  ports:
+    - protocol: "TCP"
+      port: 8080
+  type: NodePort

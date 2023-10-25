@@ -31,51 +31,44 @@ pipeline {
             }
         }
 
-    //     stage('Login') {
-    //         steps {
-    //             sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-    //         }
-    //     }
+        stage('Describe pod') {
+            steps{
+                script{
+                    sh "kubectl get all -n ciam"
+                }
+            }
+        }
 
-    //    stage('Push') {
+    //    stage('Stop Image at local') {
     //         steps {
     //             script {
     //                 def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-    //                 sh "docker push $IMAGE_NAME:$lastCommitSHA"
+    //                 def parentCommitSHA = sh(script: "git rev-parse ${lastCommitSHA}^", returnStdout: true).trim()
+    //                 def imageName = "${IMAGE_NAME}:${parentCommitSHA}"
+                    
+    //                 // Check if the container exists before stopping it
+    //                 def existingContainerId = sh(script:"docker ps -aqf ancestor=${imageName}", returnStdout: true).trim()
+                    
+    //                 if (existingContainerId) {
+    //                     sh "docker stop $existingContainerId"
+    //                     sh "docker rm $existingContainerId"
+    //                     echo "Stopped and removed container $imageName"
+    //                 } else {
+    //                     echo "Container $imageName not found, skipping removal"
+    //                 }
     //             }
     //         }
     //     }
 
-       stage('Stop Image at local') {
-            steps {
-                script {
-                    def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                    def parentCommitSHA = sh(script: "git rev-parse ${lastCommitSHA}^", returnStdout: true).trim()
-                    def imageName = "${IMAGE_NAME}:${parentCommitSHA}"
-                    
-                    // Check if the container exists before stopping it
-                    def existingContainerId = sh(script:"docker ps -aqf ancestor=${imageName}", returnStdout: true).trim()
-                    
-                    if (existingContainerId) {
-                        sh "docker stop $existingContainerId"
-                        sh "docker rm $existingContainerId"
-                        echo "Stopped and removed container $imageName"
-                    } else {
-                        echo "Container $imageName not found, skipping removal"
-                    }
-                }
-            }
-        }
 
-
-       stage('Running Image at local') {
-            steps {
-                script {
-                    def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                    sh "docker run -d -p 8000:8000 $IMAGE_NAME:$lastCommitSHA"
-                }
-            }
-        }
+    //    stage('Running Image at local') {
+    //         steps {
+    //             script {
+    //                 def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+    //                 sh "docker run -d -p 8000:8000 $IMAGE_NAME:$lastCommitSHA"
+    //             }
+    //         }
+    //     }
 
     }
 
