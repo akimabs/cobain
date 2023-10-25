@@ -6,6 +6,8 @@ import com.ciam.cobain.entity.UserEntity;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.web.bind.annotation.PathVariable;
+
 public interface UserService {
 
     BaseResponse<List<UserEntity>> findAllUser();
@@ -16,7 +18,7 @@ public interface UserService {
 
     BaseResponse<UserEntity[]> saveUserWithHPA(UserEntity[] userEntity);
 
-    BaseResponse<UserEntity> updateUser(UserEntity userEntity);
+    BaseResponse<UserEntity> updateUser(@PathVariable("id") Integer id, UserEntity userEntity);
 
     BaseResponse<UserEntity> deleteUser(Integer id);
 }

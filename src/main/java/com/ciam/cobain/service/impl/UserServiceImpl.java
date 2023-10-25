@@ -6,6 +6,8 @@ import com.ciam.cobain.repository.UserRepository;
 import com.ciam.cobain.service.UserService;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +52,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BaseResponse<UserEntity> updateUser(UserEntity userEntity) {
-        UserEntity data = userRepository.save(userEntity);
-        return new BaseResponse<UserEntity>(200, data);
+    public BaseResponse<UserEntity> updateUser(@PathVariable("id") Integer id, @RequestBody UserEntity userEntity) {
+        Optional<UserEntity> userOptional = userRepository.findById(id);
+
+        if (userOptional.isPresent()) {
+            UserEntity existingUser = userOptional.get();
+            existingUser.setName(userEntity.getName());
+            existingUser.setGender(userEntity.getGender());
+            existingUser.setAddress(userEntity.getAddress());
+
+            UserEntity updatedUser = userRepository.save(existingUser);
+            return new BaseResponse<UserEntity>(200, updatedUser);
+        } else {
+            return new BaseResponse<UserEntity>(404, null);
+        }
     }
 
     @Override

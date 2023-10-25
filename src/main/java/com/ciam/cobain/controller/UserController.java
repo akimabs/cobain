@@ -5,12 +5,9 @@ import org.springframework.web.bind.annotation.*;
 import com.ciam.cobain.dto.response.BaseResponse;
 import com.ciam.cobain.entity.UserEntity;
 import com.ciam.cobain.service.UserService;
-import com.fasterxml.jackson.databind.JsonSerializable.Base;
 
 import java.util.List;
 import java.util.Optional;
-
-import javax.swing.text.html.parser.Entity;
 
 @RestController
 @RequestMapping("/users")
@@ -42,9 +39,9 @@ public class UserController {
         return userService.saveUserWithHPA(employeeEntity);
     }
 
-    @PutMapping
-    public BaseResponse<UserEntity> updateUser(@RequestBody UserEntity employeeEntity) {
-        return userService.updateUser(employeeEntity);
+    @PutMapping("/{id}")
+    public BaseResponse<UserEntity> updateUser(@PathVariable("id") Integer id, @RequestBody UserEntity employeeEntity) {
+        return userService.updateUser(id, employeeEntity);
     }
 
     @DeleteMapping("/{id}")
