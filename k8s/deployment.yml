@@ -40,15 +40,3 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_DB
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: apps-cobain-service
-spec:
-  selector:
-    app: apps-cobain
-  ports:
-    - protocol: "TCP"
-      port: 8080
-  type: NodePort
