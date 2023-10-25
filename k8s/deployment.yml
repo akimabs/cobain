@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: apps-cobain
-          image: images/apps-cobain:v9
+          image: images/apps-cobain
           imagePullPolicy: IfNotPresent
           resources:
             limits:
