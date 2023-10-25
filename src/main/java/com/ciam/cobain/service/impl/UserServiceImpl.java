@@ -57,9 +57,18 @@ public class UserServiceImpl implements UserService {
 
         if (userOptional.isPresent()) {
             UserEntity existingUser = userOptional.get();
-            existingUser.setName(userEntity.getName());
-            existingUser.setGender(userEntity.getGender());
-            existingUser.setAddress(userEntity.getAddress());
+
+            if (userEntity.getAddress() != null) {
+                existingUser.setAddress(userEntity.getAddress());
+            }
+
+            if (userEntity.getGender() != null) {
+                existingUser.setGender(userEntity.getGender());
+            }
+
+            if (userEntity.getName() != null) {
+                existingUser.setName(existingUser.getName());
+            }
 
             UserEntity updatedUser = userRepository.save(existingUser);
             return new BaseResponse<UserEntity>(200, updatedUser);
