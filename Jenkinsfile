@@ -57,7 +57,7 @@ pipeline {
                     def existingContainerId = sh(script:"docker ps -aqf ancestor=${imageName}", returnStdout: true).trim()
                     
                     if (existingContainerId) {
-                        sh "docker stop $imageName"
+                        sh "docker stop $existingContainerId"
                         sh "docker rm $existingContainerId"
                         echo "Stopped and removed container $imageName"
                     } else {
