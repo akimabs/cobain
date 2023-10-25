@@ -4,6 +4,8 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
         IMAGE_NAME = 'akimabs/cobain'
+        DEPLOYMENT_FILE = 'k8s/deployment.yml'
+        HPA_FILE = 'k8s/hpa.yml'
     }
 
     stages {
@@ -39,37 +41,19 @@ pipeline {
             }
         }
 
-    //    stage('Stop Image at local') {
-    //         steps {
-    //             script {
-    //                 def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-    //                 def parentCommitSHA = sh(script: "git rev-parse ${lastCommitSHA}^", returnStdout: true).trim()
-    //                 def imageName = "${IMAGE_NAME}:${parentCommitSHA}"
-                    
-    //                 // Check if the container exists before stopping it
-    //                 def existingContainerId = sh(script:"docker ps -aqf ancestor=${imageName}", returnStdout: true).trim()
-                    
-    //                 if (existingContainerId) {
-    //                     sh "docker stop $existingContainerId"
-    //                     sh "docker rm $existingContainerId"
-    //                     echo "Stopped and removed container $imageName"
-    //                 } else {
-    //                     echo "Container $imageName not found, skipping removal"
-    //                 }
-    //             }
-    //         }
-    //     }
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    def parentCommitSHA = sh(script: "git rev-parse ${lastCommitSHA}^", returnStdout: true).trim()
 
+                    sh 'sed -i "s|image: $IMAGE_NAME:$parentCommitSHA|image: $IMAGE_NAME:lastCommitSHA|g" $DEPLOYMENT_FILE'
 
-    //    stage('Running Image at local') {
-    //         steps {
-    //             script {
-    //                 def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-    //                 sh "docker run -d -p 8000:8000 $IMAGE_NAME:$lastCommitSHA"
-    //             }
-    //         }
-    //     }
-
+                    sh 'kubectl apply -f $DEPLOYMENT_FILE'
+                    sh 'kubectl apply -f $HPA_FILE'
+                }
+            }
+        }
     }
 
     post {
