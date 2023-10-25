@@ -49,6 +49,7 @@ pipeline {
        stage('Stop Image at local') {
             steps {
                 script {
+                    def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                     def parentCommitSHA = sh(script: "git rev-parse ${lastCommitSHA}^", returnStdout: true).trim()
                     sh "docker stop $IMAGE_NAME:$parentCommitSHA"
                 }
