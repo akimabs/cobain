@@ -49,8 +49,8 @@ pipeline {
                     def imageName = "${IMAGE_NAME}:${parentCommitSHA}"
 
                     sh "kubectl set image deployment/apps-cobain apps-cobain=$imageName -n ciam"
-                    sh 'kubectl apply -f $DEPLOYMENT_FILE'
-                    sh 'kubectl apply -f $HPA_FILE'
+                    sh 'kubectl apply -f $DEPLOYMENT_FILE -n ciam'
+                    sh 'kubectl apply -f $HPA_FILE -n ciam'
                 }
             }
         }
