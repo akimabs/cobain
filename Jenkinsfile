@@ -31,20 +31,20 @@ pipeline {
             }
         }
 
-        stage('Login') {
-            steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-            }
-        }
+    //     stage('Login') {
+    //         steps {
+    //             sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+    //         }
+    //     }
 
-       stage('Push') {
-            steps {
-                script {
-                    def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                    sh "docker push $IMAGE_NAME:$lastCommitSHA"
-                }
-            }
-        }
+    //    stage('Push') {
+    //         steps {
+    //             script {
+    //                 def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+    //                 sh "docker push $IMAGE_NAME:$lastCommitSHA"
+    //             }
+    //         }
+    //     }
 
        stage('Running Image at local') {
             steps {
