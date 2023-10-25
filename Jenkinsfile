@@ -16,7 +16,7 @@ pipeline {
         stage('Build Apps') {
             steps {
                 script{
-                    sh "mvn clean install -DskipTests=true"
+                    sh "./mvnw clean install -DskipTests=true"
                 }
             }
         }
