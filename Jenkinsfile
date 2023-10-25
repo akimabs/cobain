@@ -46,6 +46,15 @@ pipeline {
             }
         }
 
+       stage('Running Image at local') {
+            steps {
+                script {
+                    def lastCommitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    sh "docker run -d -p 8000:8000 $IMAGE_NAME:$lastCommitSHA"
+                }
+            }
+        }
+
     }
 
     post {
