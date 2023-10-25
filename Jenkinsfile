@@ -13,6 +13,14 @@ pipeline {
             }
         }
 
+        stage('Build Apps') {
+            steps {
+                script{
+                    sh "mvn clean install -DskipTests=true"
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
