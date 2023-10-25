@@ -54,7 +54,7 @@ pipeline {
                     def imageName = "${IMAGE_NAME}:${parentCommitSHA}"
                     
                     // Check if the container exists before stopping it
-                    def existingContainerId = sh("docker ps -aqf ancestor=${imageName}", returnStatus: true, returnStdout: true).trim()
+                    def existingContainerId = sh("docker ps -aqf ancestor=${imageName}", returnStdout: true).trim()
                     
                     if (existingContainerId) {
                         sh "docker stop $imageName"
