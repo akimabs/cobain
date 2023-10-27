@@ -1,6 +1,6 @@
 package com.ciam.cobain.service;
 
-import com.ciam.cobain.dto.response.BaseResponse;
+import com.ciam.cobain.dto.BaseResponse;
 import com.ciam.cobain.entity.UserEntity;
 
 import java.util.List;

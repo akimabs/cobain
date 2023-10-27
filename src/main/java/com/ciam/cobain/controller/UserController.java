@@ -2,7 +2,7 @@ package com.ciam.cobain.controller;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.ciam.cobain.dto.response.BaseResponse;
+import com.ciam.cobain.dto.BaseResponse;
 import com.ciam.cobain.entity.UserEntity;
 import com.ciam.cobain.service.UserService;
 

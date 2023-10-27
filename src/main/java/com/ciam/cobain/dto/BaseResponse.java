@@ -1,4 +1,4 @@
-package com.ciam.cobain.dto.response;
+package com.ciam.cobain.dto;
 
 import java.io.Serializable;
 

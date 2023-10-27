@@ -1,6 +1,6 @@
 package com.ciam.cobain.service.impl;
 
-import com.ciam.cobain.dto.response.BaseResponse;
+import com.ciam.cobain.dto.BaseResponse;
 import com.ciam.cobain.entity.UserEntity;
 import com.ciam.cobain.repository.UserRepository;
 import com.ciam.cobain.service.UserService;
